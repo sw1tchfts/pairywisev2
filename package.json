@@ -1,0 +1,13 @@
+{
+  "name": "pairwise-audio-ranker",
+  "version": "1.0.0",
+  "description": "A simple pairwise ranking app for audio clips with per-user contexts, clip trimming, and Elo ratings.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}

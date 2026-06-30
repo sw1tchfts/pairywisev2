@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pairwise Audio Ranker</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <h1>🎧 Pairwise Audio Ranker</h1>
+    <div class="user-bar">
+      <label for="user-select">User context</label>
+      <select id="user-select"></select>
+      <button id="add-user-btn" class="ghost" title="Add a new user">+ New user</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="rank">Rank</button>
+    <button class="tab" data-tab="trim">Trim a clip</button>
+    <button class="tab" data-tab="board">Leaderboard</button>
+  </nav>
+
+  <main>
+    <!-- RANK -------------------------------------------------------------->
+    <section id="tab-rank" class="tab-panel active">
+      <p class="hint">Listen to both clips, then pick the one you prefer. Ratings are tracked separately per user.</p>
+      <div id="rank-empty" class="empty hidden">
+        Need at least two clips to compare. Add audio files to the clips folder or trim a new clip.
+      </div>
+      <div id="rank-arena" class="arena">
+        <div class="contender" data-side="a">
+          <div class="contender-name" data-name="a"></div>
+          <audio data-audio="a" controls preload="metadata"></audio>
+          <button class="pick-btn" data-pick="a">Pick this one ▲</button>
+        </div>
+        <div class="vs">VS</div>
+        <div class="contender" data-side="b">
+          <div class="contender-name" data-name="b"></div>
+          <audio data-audio="b" controls preload="metadata"></audio>
+          <button class="pick-btn" data-pick="b">Pick this one ▲</button>
+        </div>
+      </div>
+      <div class="rank-actions">
+        <button id="skip-btn" class="ghost">Skip this pair ↻</button>
+        <span id="vote-count" class="muted"></span>
+      </div>
+    </section>
+
+    <!-- TRIM -------------------------------------------------------------->
+    <section id="tab-trim" class="tab-panel">
+      <p class="hint">Pick a source clip, choose start/end points, preview, then save the trimmed clip. It becomes available for ranking immediately.</p>
+      <div class="trim-controls">
+        <label for="trim-source">Source clip</label>
+        <select id="trim-source"></select>
+      </div>
+
+      <div id="trimmer" class="trimmer hidden">
+        <canvas id="waveform" height="120"></canvas>
+        <div class="range-row">
+          <div class="range-field">
+            <label>Start: <span id="start-label">0.00</span>s</label>
+            <input type="range" id="start-range" min="0" max="1000" value="0" />
+          </div>
+          <div class="range-field">
+            <label>End: <span id="end-label">0.00</span>s</label>
+            <input type="range" id="end-range" min="0" max="1000" value="1000" />
+          </div>
+        </div>
+        <div class="trim-buttons">
+          <button id="preview-btn">▶ Preview selection</button>
+          <button id="stop-btn" class="ghost">■ Stop</button>
+          <label class="name-field">Save as:
+            <input type="text" id="trim-name" placeholder="my-trimmed-clip" />
+          </label>
+          <button id="save-trim-btn" class="primary">💾 Save trimmed clip</button>
+        </div>
+        <div id="trim-status" class="muted"></div>
+      </div>
+    </section>
+
+    <!-- LEADERBOARD ------------------------------------------------------->
+    <section id="tab-board" class="tab-panel">
+      <p class="hint">Elo ranking for <strong id="board-user"></strong>. Higher rating = preferred more often.</p>
+      <table id="board-table">
+        <thead>
+          <tr><th>#</th><th>Clip</th><th>Rating</th><th>W</th><th>L</th><th>Comparisons</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div id="board-empty" class="empty hidden">No comparisons yet for this user. Head to the Rank tab to start.</div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

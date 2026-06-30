@@ -1,0 +1,11 @@
+node_modules/
+
+# Local ranking data — generated at runtime.
+data.json
+
+# Audio clips are local assets, not committed.
+clips/*
+!clips/.gitkeep
+!clips/trimmed/
+clips/trimmed/*
+!clips/trimmed/.gitkeep
