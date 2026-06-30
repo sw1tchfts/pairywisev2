@@ -36,11 +36,16 @@ No build step, no external dependencies — just Node.
 
 2. Start the server:
 
-   ```bash
-   npm start
-   ```
+   - **Windows:** double-click **`start.bat`** — it launches the server and
+     opens the app in your default browser automatically.
+   - **Any platform:**
 
-3. Open <http://localhost:4000>.
+     ```bash
+     npm start
+     ```
+
+3. The browser opens automatically with `start.bat`; otherwise open
+   <http://localhost:4000>.
 
 ### Using a different clips folder
 
