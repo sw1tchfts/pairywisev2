@@ -101,6 +101,24 @@ main { padding: 24px; max-width: 980px; margin: 0 auto; }
 .trim-buttons { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
 .name-field { display: flex; align-items: center; gap: 8px; color: var(--muted); }
 
+/* Add clips / upload */
+.dropzone {
+  border: 2px dashed var(--border);
+  border-radius: 14px;
+  background: var(--panel);
+  padding: 40px 20px;
+  text-align: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+.dropzone.dragover { border-color: var(--accent); background: var(--panel-2); }
+.dropzone-inner p { margin: 6px 0; }
+.dropzone-icon { font-size: 2.2rem; }
+.upload-list { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-direction: column; gap: 6px; }
+.upload-list li { padding: 8px 12px; border-radius: 8px; background: var(--panel); border: 1px solid var(--border); font-size: 0.9rem; }
+.upload-ok { color: var(--accent-2); }
+.upload-error { color: var(--danger); }
+.upload-pending { color: var(--muted); }
+
 /* Leaderboard */
 table { width: 100%; border-collapse: collapse; background: var(--panel); border-radius: 12px; overflow: hidden; }
 th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border); }

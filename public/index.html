@@ -18,6 +18,7 @@
 
   <nav class="tabs">
     <button class="tab active" data-tab="rank">Rank</button>
+    <button class="tab" data-tab="add">Add clips</button>
     <button class="tab" data-tab="trim">Trim a clip</button>
     <button class="tab" data-tab="board">Leaderboard</button>
   </nav>
@@ -27,7 +28,7 @@
     <section id="tab-rank" class="tab-panel active">
       <p class="hint">Listen to both clips, then pick the one you prefer. Ratings are tracked separately per user.</p>
       <div id="rank-empty" class="empty hidden">
-        Need at least two clips to compare. Add audio files to the clips folder or trim a new clip.
+        Need at least two clips to compare. Use the <strong>Add clips</strong> tab to upload audio, or drop files in the clips folder.
       </div>
       <div id="rank-arena" class="arena">
         <div class="contender" data-side="a">
@@ -46,6 +47,22 @@
         <button id="skip-btn" class="ghost">Skip this pair ↻</button>
         <span id="vote-count" class="muted"></span>
       </div>
+    </section>
+
+    <!-- ADD CLIPS --------------------------------------------------------->
+    <section id="tab-add" class="tab-panel">
+      <p class="hint">Upload audio files from your computer. They're saved into the clips folder and become available for ranking and trimming right away.</p>
+      <div id="dropzone" class="dropzone">
+        <div class="dropzone-inner">
+          <div class="dropzone-icon">⬆️</div>
+          <p><strong>Drag &amp; drop audio files here</strong></p>
+          <p class="muted">or</p>
+          <button id="choose-files-btn" class="primary">Choose files…</button>
+          <input type="file" id="file-input" accept="audio/*,.wav,.mp3,.ogg,.oga,.flac,.m4a,.aac,.webm,.opus" multiple hidden />
+          <p class="muted">Supported: wav, mp3, ogg, flac, m4a, aac, webm, opus</p>
+        </div>
+      </div>
+      <ul id="upload-list" class="upload-list"></ul>
     </section>
 
     <!-- TRIM -------------------------------------------------------------->

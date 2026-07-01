@@ -284,6 +284,28 @@ async function handleApi(req, res, url) {
     return sendJson(res, 200, { clip: { id, name: filename, source: "trimmed" } });
   }
 
+  // POST /api/upload — save an original audio file into the clips root.
+  // Header: x-clip-name (original filename). Body: raw audio bytes.
+  if (req.method === "POST" && url.pathname === "/api/upload") {
+    const buf = await readBody(req);
+    if (!buf.length) return sendJson(res, 400, { error: "Empty upload" });
+    const original = safeFilename(req.headers["x-clip-name"] || "clip");
+    const ext = path.extname(original).toLowerCase();
+    if (!AUDIO_EXTENSIONS.has(ext)) {
+      return sendJson(res, 400, { error: `Unsupported file type: ${ext || "(none)"}` });
+    }
+    await fsp.mkdir(CLIPS_DIR, { recursive: true });
+    const base = original.slice(0, original.length - ext.length);
+    let filename = `${base}${ext}`;
+    let i = 1;
+    // Avoid clobbering an existing clip.
+    while (fs.existsSync(path.join(CLIPS_DIR, filename))) {
+      filename = `${base}-${i++}${ext}`;
+    }
+    await fsp.writeFile(path.join(CLIPS_DIR, filename), buf);
+    return sendJson(res, 200, { clip: { id: filename, name: filename, source: "original" } });
+  }
+
   sendJson(res, 404, { error: "Unknown endpoint" });
 }
 

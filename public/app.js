@@ -94,6 +94,7 @@ $$(".tab").forEach((tab) => {
 
 function renderActiveTab() {
   if (activeTab === "rank") renderRank();
+  else if (activeTab === "add") {/* upload UI is static */}
   else if (activeTab === "trim") renderTrimSources();
   else if (activeTab === "board") renderBoard();
 }
@@ -183,6 +184,78 @@ $("#skip-btn").addEventListener("click", () => {
   $$("#rank-arena audio").forEach((el) => el.pause());
   state.pair = choosePair();
   renderRank();
+});
+
+// ---------------------------------------------------------------------------
+// Uploading original clips
+// ---------------------------------------------------------------------------
+
+const AUDIO_EXTS = ["wav", "mp3", "ogg", "oga", "flac", "m4a", "aac", "webm", "opus"];
+
+function hasAudioExt(name) {
+  const ext = name.split(".").pop().toLowerCase();
+  return AUDIO_EXTS.includes(ext);
+}
+
+async function uploadFiles(fileList) {
+  const files = Array.from(fileList);
+  const list = $("#upload-list");
+  for (const file of files) {
+    const li = document.createElement("li");
+    if (!hasAudioExt(file.name)) {
+      li.className = "upload-error";
+      li.textContent = `✕ ${file.name} — unsupported file type, skipped`;
+      list.prepend(li);
+      continue;
+    }
+    li.className = "upload-pending";
+    li.textContent = `⏳ Uploading ${file.name}…`;
+    list.prepend(li);
+    try {
+      const buf = await file.arrayBuffer();
+      const data = await api("/api/upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/octet-stream", "x-clip-name": file.name },
+        body: buf,
+      });
+      // Add to local state so it's instantly rankable and trimmable.
+      if (!state.clips.some((c) => c.id === data.clip.id)) {
+        state.clips.push(data.clip);
+        state.clips.sort((a, b) => a.id.localeCompare(b.id));
+      }
+      li.className = "upload-ok";
+      li.textContent = `✓ Added ${data.clip.name}`;
+    } catch (err) {
+      li.className = "upload-error";
+      li.textContent = `✕ ${file.name} — ${err.message}`;
+    }
+  }
+  // Refresh any views that list clips.
+  renderTrimSources();
+  if (activeTab === "rank") renderRank();
+}
+
+$("#choose-files-btn").addEventListener("click", () => $("#file-input").click());
+$("#file-input").addEventListener("change", (e) => {
+  if (e.target.files.length) uploadFiles(e.target.files);
+  e.target.value = ""; // allow re-selecting the same file
+});
+
+const dropzone = $("#dropzone");
+["dragenter", "dragover"].forEach((ev) =>
+  dropzone.addEventListener(ev, (e) => {
+    e.preventDefault();
+    dropzone.classList.add("dragover");
+  })
+);
+["dragleave", "drop"].forEach((ev) =>
+  dropzone.addEventListener(ev, (e) => {
+    e.preventDefault();
+    dropzone.classList.remove("dragover");
+  })
+);
+dropzone.addEventListener("drop", (e) => {
+  if (e.dataTransfer?.files?.length) uploadFiles(e.dataTransfer.files);
 });
 
 // ---------------------------------------------------------------------------

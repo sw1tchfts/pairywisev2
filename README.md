@@ -9,6 +9,9 @@ No build step, no external dependencies — just Node.
 
 ## Features
 
+- **Add clips** – Upload audio files straight from the browser (button or
+  drag-and-drop). Files are saved into the clips folder and are instantly
+  rankable and trimmable. You can also still just copy files into the folder.
 - **Rank** – Listen to two clips side by side and pick a winner. Pairs are
   chosen to favour the least-compared clips so coverage stays even.
 - **Trim** – Pick a source clip, set start/end points over a waveform, preview
@@ -30,9 +33,10 @@ No build step, no external dependencies — just Node.
 
 ## Getting started
 
-1. Put your audio clips in the `clips/` folder (or point the app at any folder —
-   see below). Supported: `.wav`, `.mp3`, `.ogg`, `.flac`, `.m4a`, `.aac`,
-   `.webm`, `.opus`.
+1. Add your audio clips. Either upload them from the **Add clips** tab once the
+   app is running, or put files in the `clips/` folder directly (or point the
+   app at any folder — see below). Supported: `.wav`, `.mp3`, `.ogg`, `.flac`,
+   `.m4a`, `.aac`, `.webm`, `.opus`.
 
 2. Start the server:
 
